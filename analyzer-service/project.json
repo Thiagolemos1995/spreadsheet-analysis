@@ -1,0 +1,53 @@
+{
+  "name": "analyzer-service",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "analyzer-service/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/analyzer-service",
+        "main": "analyzer-service/src/main.ts",
+        "tsConfig": "analyzer-service/tsconfig.app.json",
+        "assets": ["analyzer-service/src/assets"],
+        "webpackConfig": "analyzer-service/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "analyzer-service:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "analyzer-service:build:development"
+        },
+        "production": {
+          "buildTarget": "analyzer-service:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "analyzer-service/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
