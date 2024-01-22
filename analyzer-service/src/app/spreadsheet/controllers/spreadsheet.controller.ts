@@ -1,7 +1,9 @@
 import {
   Controller,
+  Delete,
   Get,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +18,8 @@ import {
   SubscriberData,
   SubscriberDataResponse,
 } from '../models/subscriberData.interface';
+import { GetSubscriberDto } from '../models/dtos';
+import { DeleteResult } from 'typeorm';
 
 export const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(xlsx)$/)) {
@@ -58,7 +62,21 @@ export class SpreadsheetController {
   }
 
   @Get()
-  subscriberData(): Observable<SubscriberData[]> {
+  fetchSubscriberData(): Observable<SubscriberData[]> {
     return this.spreadsheetService.fetchSubscriberData();
+  }
+
+  @Get()
+  fetchSubscriberDataById(
+    @Query() params: GetSubscriberDto
+  ): Observable<SubscriberData> {
+    return this.spreadsheetService.fetchSubscriberDataById(params);
+  }
+
+  @Delete()
+  deleteSubscriberData(
+    @Query() params: GetSubscriberDto
+  ): Observable<DeleteResult> {
+    return this.spreadsheetService.deleteSubscriberData(params);
   }
 }

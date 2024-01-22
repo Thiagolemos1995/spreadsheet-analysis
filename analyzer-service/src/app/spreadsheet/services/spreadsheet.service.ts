@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as xlsx from 'xlsx';
 import { Express } from 'express';
 import 'multer';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { SubscriberDataEntity } from '../models/subscriber.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -10,6 +10,7 @@ import {
   SubscriberDataResponse,
 } from '../models/subscriberData.interface';
 import { Observable, from } from 'rxjs';
+import { GetSubscriberDto } from '../models/dtos';
 
 @Injectable()
 export class SpreadsheetService {
@@ -53,5 +54,17 @@ export class SpreadsheetService {
 
   fetchSubscriberData(): Observable<SubscriberData[]> {
     return from(this.subscriberDataRepository.find());
+  }
+
+  fetchSubscriberDataById(
+    params: GetSubscriberDto
+  ): Observable<SubscriberData> {
+    return from(
+      this.subscriberDataRepository.findOne({ where: { id: params.id } })
+    );
+  }
+
+  deleteSubscriberData(params: GetSubscriberDto): Observable<DeleteResult> {
+    return from(this.subscriberDataRepository.delete(params));
   }
 }
