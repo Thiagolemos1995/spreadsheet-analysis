@@ -3,10 +3,18 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  modules: ['@nuxtjs/tailwindcss', 'nuxt3-vuex-module'],
   workspaceDir: '../',
   srcDir: 'src',
   buildDir: '../dist/analyzer-ui/.nuxt',
   devtools: { enabled: true },
+  css: ['~/assets/css/tailwind.css'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
   devServer: {
     host: 'localhost',
     port: 4200,

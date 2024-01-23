@@ -1,3 +1,3 @@
 <template>
-  <NxWelcome title="analyzer-ui" />
+  <MainCard />
 </template>
