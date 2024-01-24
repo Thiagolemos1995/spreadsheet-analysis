@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  # Postgresql
+  db:
+    image: postgres:latest
+    container_name: my-postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: subscriberdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d/01-subscriberdata.sql
+
+  # Nuxt App
+  app-1:
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
+    command: npm run analyzer-ui
+    ports:
+      - 4200:4200
+    depends_on:
+      - db
+
+  # Nest App
+  api-1:
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
+    command: npm run analyzer-service
+    ports:
+      - 3000:3000 # API Entry port 
+    depends_on:
+      - db 
+
+volumes:
+  mono-node-modules: null
