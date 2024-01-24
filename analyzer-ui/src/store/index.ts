@@ -1,8 +1,9 @@
-import { fetchSubscriberFile } from '../services/fetchSubscriberFiles';
+import { fetchSubscriberFile, fetchSubscriberFileById } from '../services';
 
 // states
 export const state = () => ({
   subscriberFileList: [],
+  subscriberFileData: [],
 });
 
 //getters
@@ -15,11 +16,19 @@ export const actions = {
     commit('addFileList', subscriberFileList);
     return subscriberFileList;
   },
+  async getSubscriberFileById({ commit }, id) {
+    const subscriberFileData = await fetchSubscriberFileById(id);
+    commit('addsubscriberFileData', subscriberFileData);
+    return subscriberFileData;
+  },
 };
 
 //mutations
 export const mutations = {
   addFileList(state, subscriberFileList) {
     state.subscriberFileList = subscriberFileList;
+  },
+  addsubscriberFileData(state, subscriberFileData) {
+    state.subscriberFileData = subscriberFileData;
   },
 };

@@ -21,7 +21,7 @@
   </button>
 
   <TransitionRoot as="template" :show="openDialog">
-    <Dialog as="div" class="relative z-10" @close="openDialog = false">
+    <DialogComponent as="div" class="relative z-10" @close="openDialog = false">
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -94,14 +94,13 @@
           </TransitionChild>
         </div>
       </div>
-    </Dialog>
+    </DialogComponent>
   </TransitionRoot>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
 import {
-  Dialog,
+  Dialog as DialogComponent,
   DialogPanel,
   DialogTitle,
   TransitionChild,
@@ -109,14 +108,18 @@ import {
 } from '@headlessui/vue';
 import { uploadSubscriberFile } from '~/services';
 
-const openDialog = ref(false);
-</script>
-
-<script>
 export default {
+  components: {
+    DialogComponent,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+  },
   data() {
     return {
       file: null,
+      openDialog: false,
     };
   },
   methods: {
@@ -138,8 +141,9 @@ export default {
 
         // Handle the response as needed
         console.log('File uploaded successfully', response.data);
+        this.openDialog = false;
       } catch (error) {
-        console.error('Error uploading file', error);
+        window.alert('Error uploading file', error);
       } finally {
         this.file = undefined;
       }
