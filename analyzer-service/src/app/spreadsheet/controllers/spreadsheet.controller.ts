@@ -62,15 +62,15 @@ export class SpreadsheetController {
   }
 
   @Get()
-  fetchSubscriberData(): Observable<SubscriberData[]> {
-    return this.spreadsheetService.fetchSubscriberData();
-  }
-
-  @Get()
   fetchSubscriberDataById(
     @Query() params: GetSubscriberDto
   ): Observable<SubscriberData> {
     return this.spreadsheetService.fetchSubscriberDataById(params);
+  }
+
+  @Get('/all')
+  fetchSubscriberData(): Observable<SubscriberData[]> {
+    return this.spreadsheetService.fetchSubscriberData();
   }
 
   @Delete()

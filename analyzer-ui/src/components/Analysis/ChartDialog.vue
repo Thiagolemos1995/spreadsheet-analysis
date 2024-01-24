@@ -1,7 +1,8 @@
 <template>
   <button
+    data-tooltip-target="tooltip"
     class="px-2 bg-white py-2 rounded-lg hover:bg-green-200 transition-colors duration-300 ease-in-out text-green-900 font-bold"
-    @click="openDialog = true"
+    @click="handleOpenChartDialog(fileId)"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,14 +12,21 @@
     >
       <path
         fill-rule="evenodd"
-        d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
+        d="M1 2.75A.75.75 0 0 1 1.75 2h16.5a.75.75 0 0 1 0 1.5H18v8.75A2.75 2.75 0 0 1 15.25 15h-1.072l.798 3.06a.75.75 0 0 1-1.452.38L13.41 18H6.59l-.114.44a.75.75 0 0 1-1.452-.38L5.823 15H4.75A2.75 2.75 0 0 1 2 12.25V3.5h-.25A.75.75 0 0 1 1 2.75ZM7.373 15l-.391 1.5h6.037l-.392-1.5H7.373Zm7.49-8.931a.75.75 0 0 1-.175 1.046 19.326 19.326 0 0 0-3.398 3.098.75.75 0 0 1-1.097.04L8.5 8.561l-2.22 2.22A.75.75 0 1 1 5.22 9.72l2.75-2.75a.75.75 0 0 1 1.06 0l1.664 1.663a20.786 20.786 0 0 1 3.122-2.74.75.75 0 0 1 1.046.176Z"
         clip-rule="evenodd"
       />
     </svg>
   </button>
 
-  <TransitionRoot as="template" :show="openDialog">
-    <DialogComponent as="div" class="relative z-10" @close="openDialog = false">
+  <TransitionRoot
+    as="template"
+    :show="openDialog"
+  >
+    <DialogComponent
+      as="div"
+      class="relative z-10"
+      @close="openDialog = false"
+    >
       <TransitionChild
         as="template"
         enter="ease-out duration-300"
@@ -51,38 +59,35 @@
             >
               <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:flex-col sm:justify-center gap-5">
-                  <div
-                    v-fv
-                    class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left"
-                  >
+                  <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <DialogTitle
                       as="h3"
                       class="text-base font-semibold leading-6 text-gray-900"
                     >
-                      Delete file {{ fileId }} - {{ fileName }}
+                      Subscriber Data Chart {{ fileId }} - {{ fileName }}
                     </DialogTitle>
                   </div>
 
-                  <span>Are you sure to delete this File ?</span>
+                  <Bar
+                    v-if="loaded"
+                    :data="monthlyRecurringRevenueChartData"
+                  />
+                  <Bar
+                    v-if="loaded"
+                    :data="churnRateChartData"
+                  />
                 </div>
               </div>
               <div
                 class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-6"
               >
                 <button
-                  type="button"
-                  class="w-full bg-green-500 py-2 rounded-lg hover:bg-green-900 transition-colors duration-300 ease-in-out text-white font-bold"
-                  @click="deleteFile(fileId)"
-                >
-                  Confirm
-                </button>
-                <button
                   ref="cancelButtonRef"
                   type="button"
                   class="w-full bg-white py-2 rounded-lg hover:bg-green-200 transition-colors duration-300 ease-in-out text-green-900 font-bold"
                   @click="openDialog = false"
                 >
-                  Cancel
+                  close
                 </button>
               </div>
             </DialogPanel>
@@ -101,7 +106,26 @@ import {
   TransitionChild,
   TransitionRoot,
 } from '@headlessui/vue';
-import { deleteSubscriberFile } from '~/services';
+import { mapState, mapActions } from 'vuex';
+import { Bar } from 'vue-chartjs';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from 'chart.js';
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
 
 export default {
   components: {
@@ -110,6 +134,7 @@ export default {
     DialogTitle,
     TransitionChild,
     TransitionRoot,
+    Bar,
   },
   props: {
     fileId: {
@@ -124,16 +149,61 @@ export default {
   data() {
     return {
       openDialog: false,
+      loaded: false,
+      monthlyRecurringRevenueChartData: null,
+      churnRateChartData: null,
     };
   },
+  computed: mapState(['subscriberFileData']),
   methods: {
-    async deleteFile(id) {
+    ...mapActions(['getSubscriberFileById']),
+    async handleOpenChartDialog(id) {
+      this.openDialog = true;
+      this.loaded = false;
+      const chartLabel = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
       try {
-        const response = await deleteSubscriberFile(id);
-        this.openDialog = false;
-        console.log('File deleted successfully', response.data);
-      } catch (error) {
-        window.alert('Error deleting file', error);
+        const fetchDataResponse = await this.getSubscriberFileById(id);
+        this.monthlyRecurringRevenueChartData = {
+          labels: chartLabel,
+          datasets: [
+            {
+              label: 'MonthlyRecurringRevenue',
+              backgroundColor: '#00621C',
+              data: fetchDataResponse.subscriberDataRows.map(
+                (dataRows) => dataRows[0]
+              ),
+            },
+          ],
+        };
+
+        this.churnRateChartData = {
+          labels: chartLabel,
+          datasets: [
+            {
+              label: 'ChurnRate',
+              backgroundColor: '#2CE86B',
+              data: fetchDataResponse.subscriberDataRows.map(
+                (dataRows) => dataRows[1]
+              ),
+            },
+          ],
+        };
+        this.loaded = true;
+      } catch (e) {
+        console.error(e);
       }
     },
   },
