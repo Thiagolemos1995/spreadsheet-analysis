@@ -10,7 +10,7 @@ Foi utilizado como gerenciador do respositório o NX.
 
 O NX é um gerenciador de Monorepo eficiente que auxilia principalmente no desenvolvimento de aplicações em escala
 
-` <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45">``</a> `
+<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
 
 ---
 
@@ -19,7 +19,7 @@ Para a aplicação Back end foi utilizado NestJS.
 O NestJS é um framework Node, que utiliza o padrão typescript, onde podemos desenvolver utilizando injeções de dependências, tornando
 mais simples o desenvolvimento das aplicações.
 
-` <a alt="Nest logo" href="https://nestjs.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/28507035?s=48&v=4" width="45">``</a> `
+<a alt="Nest logo" href="https://nestjs.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/28507035?s=48&v=4" width="45"></a>
 
 ---
 
@@ -27,7 +27,7 @@ Como banco de dados foi utilizado Postgresql.
 
 O Postgresql é um sistema gerenciador de banco de dados e relacional de código aberto.
 
-` <a alt="postgres logo" href="https://www.postgresql.org/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/177543?s=200&v=4" width="45">``</a> `
+<a alt="postgres logo" href="https://www.postgresql.org/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/177543?s=200&v=4" width="45"></a>
 
 ---
 
@@ -36,7 +36,7 @@ Para o Front end foi utilizado NuxtJS.
 O NuxtJS é um framework Vue, uma poderosa ferramenta de desenvolvimento, onde é possível renderizar componentes e realizar o data fetching no lado do servidor
 disponibilizando uma melhor performance para aplicação.
 
-`<a alt="Nuxt logo" href="https://nuxt.com/" target="_blank" rel="noreferrer"><img src="hhttps://avatars.githubusercontent.com/u/111748132?s=48&v=4 width="45"` >``</a> `
+<a alt="Nuxt logo" href="https://nuxt.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/23360933?s=200&v=4" width="45" ></a>
 
 ---
 
@@ -44,7 +44,7 @@ Para os componentes foi utilizado a biblioteca Tailwind CSS.
 
 Uma biblioteca que fornece uma série classes pré-definidas para estilização de seu código.
 
-`<a alt="Tailwind CSS logo" href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/67109815?s=48&v=4 width="45"` >``</a> `
+<a alt="Tailwind CSS logo" href="https://tailwindcss.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/67109815?s=48&v=4" width="45" ></a>
 
 ---
 
